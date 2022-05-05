@@ -1,0 +1,48 @@
+{
+  "name": "wmod-twitter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development webpack",
+    "build": "NODE_ENV=production webpack",
+    "proxy": "TS_NODE_PROJECT=tsconfig.proxy.json npx ts-node proxy.ts 8000 twitter.com '^/(home|search)' build/hack.js",
+    "dev.proxy": "TS_NODE_PROJECT=tsconfig.proxy.json nodemon proxy.ts 8000 twitter.com '^/(home|search)' build/hack.js",
+    "lint": "eslint -f visualstudio '*/**/*.{js,ts,tsx}'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mockttp": "^3.0.0",
+    "preact": "^10.7.2",
+    "uuid": "^8.3.2",
+    "yargs": "^17.4.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/plugin-transform-react-jsx": "^7.17.3",
+    "@babel/plugin-transform-runtime": "^7.17.10",
+    "@babel/preset-env": "^7.17.10",
+    "@babel/preset-typescript": "^7.16.7",
+    "@tsconfig/node16": "^1.0.2",
+    "@types/node": "^17.0.32",
+    "@types/uuid": "^8.3.4",
+    "@types/yargs": "^17.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "fork-ts-checker-webpack-plugin": "^7.2.11",
+    "nodemon": "^2.0.16",
+    "sass": "^1.51.0",
+    "sass-loader": "^12.6.0",
+    "style-loader": "^3.3.1",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2"
+  }
+}

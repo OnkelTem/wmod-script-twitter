@@ -1,0 +1,33 @@
+.user-info {
+  padding: 0 4px;
+  display: flex;
+  gap: 4px;
+}
+
+.user-info > .value {
+  color: white;
+  font-weight: bold;
+}
+
+.user-info > .chip1 {
+  font-size: 80%;
+  padding: 0px 6px;
+  border-radius: 8px;
+  outline: 1px solid rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.user-info > .chip2 {
+  font-size: 80%;
+  padding: 0px 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+
+.user-info .disabled {
+  opacity: 0.3;
+}
+
+.user-info .chip.disabled {
+  text-decoration: line-through;
+}

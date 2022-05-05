@@ -1,0 +1,5 @@
+{
+  "verbose": true,
+  "ext": "ts",
+  "watch": ["mitm.ts"]
+}
