@@ -1,15 +1,12 @@
-import { isObject } from "./utils";
+import { findDeep, findNestedItemByPath, isObject } from './utils';
 
 export type User = {
   blocked_by: boolean;
   blocking: boolean;
-  business_profile_state: string;
   can_dm: boolean;
   can_media_tag: boolean;
-  contributors_enabled: boolean;
   created_at: string;
   description: string;
-  ext_has_nft_avatar: boolean;
   fast_followers_count: number;
   favourites_count: number;
   follow_request_sent: boolean;
@@ -17,7 +14,7 @@ export type User = {
   followers_count: number;
   following: boolean;
   friends_count: number;
-  id: number;
+  id?: number;
   name: string;
   normal_followers_count: number;
   profile_background_image_url: string;
@@ -29,7 +26,6 @@ export type User = {
   statuses_count: number;
   translator_type: string;
   url: string;
-  utc_offset: null;
   verified: boolean;
   want_retweets: boolean;
 };
@@ -40,14 +36,16 @@ export type GlobalObjectsWithUsers = {
 
 export type Username = string;
 
-export function isGlobalObjectsWithUsers(
-  arg: unknown
-): arg is { globalObjects: GlobalObjectsWithUsers } {
-  return (
-    isObject(arg) &&
-    arg["globalObjects"] != null &&
-    isObject(arg["globalObjects"]) &&
-    arg["globalObjects"]["users"] != null &&
-    isObject(arg["globalObjects"]["users"])
-  );
+export function isGlobalObjectsWithUsers(arg: unknown): arg is { globalObjects: GlobalObjectsWithUsers } {
+  return isObject(arg) && isObject(arg['globalObjects']) && isObject(arg['globalObjects']['users']);
+}
+
+const TWEET_DETAIL_USER_PATH_PARTS = ['tweet_results', 'result', 'core', 'user_results', 'result', 'legacy'];
+const TWEET_QUERY = { itemType: 'TimelineTweet' };
+
+export function getUsersTweetDetail(data: unknown): User[] {
+  const tweets = [...findDeep(data, TWEET_QUERY)];
+  return tweets
+    .map((tweet) => findNestedItemByPath<User>(tweet, TWEET_DETAIL_USER_PATH_PARTS))
+    .filter((item): item is User => item != null);
 }

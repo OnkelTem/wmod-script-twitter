@@ -4,19 +4,18 @@ MITM stands for [man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-mid
 It's also a great opportunity to modify almost any existing web application in a big scale.
 
 But what about browser extensions, you say, ain't they created for that purpose?
-Well, they are. But after years of browsers development, they have been finally rendered pretty limited
-in their capabilities.
 
-They're executed in a separate process and they can't effectively interfere with a web app,
-they can't even read what the app receives via network. But, obviously, we could perfectly achieve
-that by injecting a script into the page itself.
+Well, they are. But after years of browsers development, they have been finally rendered pretty limited
+in their capabilities. They're executed in a separate process and they can't effectively interfere
+with a web app, they can't even read what the app receives via network. But, obviously, we could
+perfectly achieve that by _injecting_ a script into the page itself.
 
 This experimental project is an example of what can be done using an HTTP/HTTPS proxy to modify
 an existing web application - https://twitter.com.
 
 ## What has been modded so far
 
-My goal was to add some cool modifications to the desktop Twitter website. Particularly I was not satisfied
+My goal was to add some cool modifications to the desktop Twitter website. Particularly, I was not satisfied
 with how it shows tweets in the feed:
 
 ![Pasted image 20220511110037](https://user-images.githubusercontent.com/114060/167895950-869d71fd-66e7-448f-8566-d08af572fe92.png)

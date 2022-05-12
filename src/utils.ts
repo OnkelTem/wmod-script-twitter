@@ -13,26 +13,35 @@ export class WrapperHTMLElement extends HTMLElement {
   }
 }
 
-const WrapperName = "custom-wrapper";
+const WrapperName = 'custom-wrapper';
 
 window.customElements.define(WrapperName, WrapperHTMLElement);
 
 enum InjectModes {
-  APPEND = "append",
+  APPEND = 'append',
 }
 
-export function injectWrapper(
-  container: HTMLElement,
-  mode: InjectModes = InjectModes.APPEND
-) {
+export function injectWrapper(container: HTMLElement, mode: InjectModes = InjectModes.APPEND) {
   let injectEl: HTMLElement | null;
   injectEl = container.querySelector(WrapperName);
   if (injectEl == null) {
     injectEl = document.createElement(WrapperName);
-    if (mode === "append") {
+    if (mode === 'append') {
       container.appendChild(injectEl);
     }
     //console.log(injectEl);
   }
   return injectEl;
+}
+
+export function dbg(...params: any) {
+  if (__DEBUG__) {
+    // eslint-disable-next-line
+    console.log(PACKAGE_NAME + ' DEBUG: ', ...params);
+  }
+}
+
+export function info(...params: any) {
+  // eslint-disable-next-line
+  console.log(PACKAGE_NAME + ' INFO: ', ...params);
 }

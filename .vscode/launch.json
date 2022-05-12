@@ -5,21 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "pwa-node",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/app.js",
       "request": "launch",
-      "name": "Launch JS",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/index2.js"
+      "type": "node"
     },
     {
+      "name": "Launch TS",
       "type": "pwa-node",
       "request": "launch",
-      "name": "Launch TS",
+      "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
-      "args": ["8000", "https://twitter.com", "build/hack.js"],
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${file}",
-      "internalConsoleOptions": "openOnSessionStart"
+      "args": ["${relativeFile}"],
+      "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**", "node_modules/**"]
     },
     {
       "type": "pwa-node",
