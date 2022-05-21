@@ -9,13 +9,13 @@
   "scripts": {
     "build": "npm run build:app && npm run build:manifest",
     "build:app": "NODE_ENV=production webpack",
-    "build:manifest": "babel src/manifest.ts --out-file build/manifest.js",
+    "build:manifest": "babel src/manifest.ts --out-file js/manifest.js",
     "dev": "concurrently 'npm:dev:app' 'npm:dev:manifest:js' 'dev:manifest:types'",
     "dev:app": "WMOD_DEBUG=1 NODE_ENV=development webpack",
-    "dev:manifest:js": "babel src/manifest.ts --watch --out-file build/manifest.js --extensions '.ts'",
+    "dev:manifest:js": "babel src/manifest.ts --watch --out-file js/manifest.js --extensions '.ts'",
     "dev:manifest:types": "tsc --project tsconfig.manifest.json --watch",
     "lint": "eslint -f visualstudio '*/**/*.{js,ts,tsx}'",
-    "proxy": "nodemon -x \"wmod-proxy -d 8000 ./build\" -w ./build/ -e 'js'"
+    "proxy": "nodemon -x \"wmod-proxy -d 8000 ./js\" -w ./js/ -e 'js'"
   },
   "dependencies": {
     "lodash.find": "^4.6.0",

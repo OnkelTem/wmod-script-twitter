@@ -1,4 +1,4 @@
-import { findDeep, findNestedItemByPath, isObject } from './utils';
+import { findDeep, findNestedItemByPath, isObject } from './../utils';
 
 export type User = {
   blocked_by: boolean;

@@ -8,7 +8,7 @@ module.exports = {
     wmod_twitter: path.resolve(__dirname, 'src/index.ts'),
   },
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'js'),
     filename: '[name].js',
     // Have to set to false because otherwise we get race conditions on manifest.* files
     clean: false,
@@ -59,7 +59,7 @@ module.exports = {
       },
     }),
     new DefinePlugin({
-      __DEBUG__: JSON.stringify(process.env.WMOD_DEBUG) && ['true', '1'].includes(process.env.WMOD_DEBUG),
+      __DEBUG__: JSON.stringify(process.env.WMOD_DEBUG) && ['true', '1', 'on', 'yes'].includes(process.env.WMOD_DEBUG),
     }),
   ],
 };
