@@ -2,10 +2,19 @@
   "name": "wmod-script-twitter",
   "version": "0.0.1",
   "description": "Website Modification Script: Twitter",
-  "keywords": [],
+  "keywords": [
+    "twitter",
+    "mitm",
+    "browser extension",
+    "mockttp",
+    "preact"
+  ],
   "homepage": "https://github.com/OnkelTem/wmod-twitter",
-  "license": "ISC",
-  "author": "",
+  "license": "LGPL-3.0-or-later",
+  "author": {
+    "name": "OnkelTem",
+    "email": "aneganov@gmail.com"
+  },
   "scripts": {
     "build": "npm run build:app && npm run build:manifest",
     "build:app": "NODE_ENV=production webpack",

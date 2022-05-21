@@ -1,17 +1,7 @@
-# Web App Modification: Twitter
+# Website Modification Script: Twitter
 
-MITM stands for [man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) cyberattack.
-It's also a great opportunity to modify almost any existing web application in a big scale.
-
-But what about browser extensions, you say, ain't they created for that purpose?
-
-Well, they are. But after years of browsers development, they have been finally rendered pretty limited
-in their capabilities. They're executed in a separate process and they can't effectively interfere
-with a web app, they can't even read what the app receives via network. But, obviously, we could
-perfectly achieve that by _injecting_ a script into the page itself.
-
-This experimental project is an example of what can be done using an HTTP/HTTPS proxy to modify
-an existing web application - https://twitter.com.
+A script which adds some details in the tweets on Twitter.com website. It must be injected using a man-in-the-middle
+proxy like [Website Modification Proxy](https://github.com/OnkelTem/wmod-script-twitter) or similar.
 
 ## What has been modded so far
 
@@ -37,16 +27,28 @@ A short video to see it in action:
 $ git clone <repo>
 $ cd wmod-twitter
 $ npm i
+```
+
+### Build
+
+To use this wmod you need to build it:
+
+```
+$ npm run build
 $ npm run proxy
 ```
 
-Upon startup the proxy script will create two files in the local `cert/` directory: `cert.pem` and `key.pem`.
+The first command builds the wmod into the `js/` directory. The second runs [wmod-proxy](https://github.com/OnkelTem/wmod-twitter)
+against `js/` directory and starts injecting code.
 
-### Configure the browser
+Also, upon startup the proxy script will create two files in the local `cert/` directory: `cert.pem` and `key.pem`.
+**You need to install `cert/cert.pem` into your browser.**
+
+### Configuring the browser
 
 #### Firefox
 
-Run your browser, open the `about:preferences` page and add the CA certificate from `cert/cert.pem`:
+Open the `about:preferences` page and add the CA certificate from `cert/cert.pem`:
 
 1. Type `cert` in the search box and click the **Vew Certificates...** button.
 2. Switch to **Authorities** tab and import `cert/cert.pem` certificate ticking _Trust this CA to identify websites_ checkbox on.
@@ -62,7 +64,23 @@ _TODO: provide an example how to prepare an appropriate certificate._
 
 ### Use
 
-Visit http://twitter.com and check the home page.
+Visit http://twitter.com and check the home page. You should see a small "WM" icon in the top of the affect pages.
+
+![image](https://user-images.githubusercontent.com/114060/169668987-3c84aabb-ddb2-4363-82b5-0153299a0384.png)
+
+## Development
+
+To run the wmod in development mode run:
+
+```
+$ npm run dev
+$ npm run proxy
+```
+
+The first command builds development version into `js/` directory and rebuilds it automatically upon
+source code modification. The second runs [wmod-proxy](https://github.com/OnkelTem/wmod-twitter)
+against `js/` directory and starts injecting code. It's also watching the `js/` directory and restarts
+the proxy when the code gets rebuilt.
 
 ## The architecture
 
