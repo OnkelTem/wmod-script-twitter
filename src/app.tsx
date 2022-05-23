@@ -16,6 +16,7 @@ export default function app() {
     [
       '^https://twitter.com/i/api/2/search/adaptive.json',
       '^https://twitter.com/i/api/2/timeline/home.json',
+      '^https://twitter.com/i/api/2/timeline/home_latest.json',
       '^https://twitter.com/i/api/2/notifications/all.json',
       '^https://twitter.com/i/api/2/guide.json',
     ],
@@ -47,6 +48,7 @@ export default function app() {
     dbg('Updated el: ', el);
     const userElements: UserElements = new Map();
     const userDiv = el.querySelector('div[id]:not([style])');
+    dbg('userDiv: ', userDiv);
     if (userDiv != null && userDiv instanceof HTMLDivElement) {
       const link = userDiv.querySelector('a[href]');
       if (link != null && link instanceof HTMLAnchorElement) {
