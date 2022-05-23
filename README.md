@@ -1,7 +1,7 @@
 # Website Modification Script: Twitter
 
 A script that adds some details to the tweets on the https://twitter.com website. It must be injected using a man-in-the-middle
-proxy like [Website Modification Proxy](https://github.com/OnkelTem/wmod-script-twitter) or similar.
+proxy like [Website Modification Proxy](https://github.com/OnkelTem/wmod-proxy) or similar.
 
 ## What has been modded so far
 
@@ -24,7 +24,7 @@ A short video to see it in action:
 
 ```
 $ git clone <repo>
-$ cd wmod-twitter
+$ cd wmod-script-twitter
 $ npm i
 ```
 
@@ -37,7 +37,7 @@ $ npm run build
 $ npm run proxy
 ```
 
-The first command builds the wmod into the `js/` directory. The second runs [wmod-proxy](https://github.com/OnkelTem/wmod-twitter)
+The first command builds the wmod into the `js/` directory. The second runs [wmod-proxy](https://github.com/OnkelTem/wmod-proxy)
 against `js/` directory and starts injecting code.
 
 Also, upon startup, the proxy script will create two files in the local `cert/` directory: `cert.pem` and `key.pem`.
@@ -63,7 +63,7 @@ _TODO: provide an example of how to prepare an appropriate certificate._
 
 ### Use
 
-Visit http://twitter.com and check the home page. You should see a small "WM" icon at the top of the affect pages.
+Visit https://twitter.com and check the home page. You should see a small "WM" icon at the top of the affect pages.
 
 ![image](https://user-images.githubusercontent.com/114060/169668987-3c84aabb-ddb2-4363-82b5-0153299a0384.png)
 
@@ -73,13 +73,10 @@ To run the wmod in development mode run:
 
 ```
 $ npm run dev
-$ npm run proxy
 ```
 
-The first command builds the development version into `js/` directory and rebuilds it automatically upon
-source code modification. The second runs [wmod-proxy](https://github.com/OnkelTem/wmod-twitter)
-against `js/` directory and starts injecting code. It's also watching the `js/` directory and restarts
-the proxy when the code gets rebuilt.
+It builds the dev version into the `js/` directory and runs the proxy which starts injection into https://twitter.com pages. 
+It also rebuilds the code when it changes and restarts the proxy.
 
 ## The architecture
 
