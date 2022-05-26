@@ -75,9 +75,15 @@ To run the wmod in development mode run:
 $ npm run dev
 ```
 
-It builds the dev version into the `js/` directory and runs the proxy which starts injection into https://twitter.com pages. 
+It builds the dev version into the `js/` directory and runs the proxy which starts injection into https://twitter.com pages.
 It also rebuilds the code when it changes and restarts the proxy.
 
 ## The architecture
 
 _TODO: finish this section._
+
+## TODO
+
+- [x] Add "hashtag" page
+- [ ] Add "following" page
+- [ ] Use XPath instead of CSS-selectors for selecting tweets and render points

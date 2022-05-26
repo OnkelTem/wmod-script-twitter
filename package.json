@@ -30,7 +30,7 @@
     "lodash.find": "^4.6.0",
     "preact": "^10.7.2",
     "uuid": "^8.3.2",
-    "wmod-proxy": "file:../wmod-proxy/wmod-proxy-0.0.1.tgz"
+    "wmod-proxy": "^0.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
