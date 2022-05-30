@@ -24,7 +24,8 @@
     "dev:manifest:js": "babel src/manifest.ts --watch --out-file js/manifest.js --extensions '.ts'",
     "dev:manifest:types": "tsc --project tsconfig.manifest.json --watch",
     "lint": "eslint -f visualstudio '*/**/*.{js,ts,tsx}'",
-    "proxy": "nodemon -x \"wmod-proxy -d 8000 ./js\" -w ./js/ -e 'js'"
+    "proxy": "nodemon -x \"wmod-proxy -d 8000 ./js\" -w ./js/ -e 'js'",
+    "release": "standard-version"
   },
   "dependencies": {
     "lodash.find": "^4.6.0",
@@ -55,6 +56,7 @@
     "nodemon": "^2.0.16",
     "sass": "^1.51.0",
     "sass-loader": "^12.6.0",
+    "standard-version": "^9.5.0",
     "style-loader": "^3.3.1",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4",
