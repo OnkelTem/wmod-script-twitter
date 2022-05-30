@@ -92,3 +92,29 @@ export function info(...params: any) {
   // eslint-disable-next-line
   console.log(PACKAGE_NAME + ' INFO: ', ...params);
 }
+
+declare global {
+  interface Window {
+    $x: (xpath: string, context?: Node) => Generator<Node>;
+  }
+}
+
+// Add $x function to Window
+if (window['$x'] == null) {
+  window.$x = function* $x(xpath: string, context?: Node) {
+    dbg('context=', context);
+
+    const iterator = window.document.evaluate(
+      xpath,
+      context ?? document.documentElement,
+      null,
+      XPathResult.ORDERED_NODE_ITERATOR_TYPE,
+      null,
+    );
+    let node = iterator.iterateNext();
+    while (node) {
+      yield node;
+      node = iterator.iterateNext();
+    }
+  };
+}

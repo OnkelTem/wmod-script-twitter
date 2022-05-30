@@ -41,11 +41,21 @@ export function isGlobalObjectsWithUsers(arg: unknown): arg is { globalObjects: 
 }
 
 const TWEET_DETAIL_USER_PATH_PARTS = ['tweet_results', 'result', 'core', 'user_results', 'result', 'legacy'];
-const TWEET_QUERY = { itemType: 'TimelineTweet' };
+const TWEET_DETAIL_ITEM_QUERY = { itemType: 'TimelineTweet' };
 
 export function getUsersTweetDetail(data: unknown): User[] {
-  const tweets = [...findDeep(data, TWEET_QUERY)];
+  const tweets = [...findDeep(data, TWEET_DETAIL_ITEM_QUERY)];
   return tweets
     .map((tweet) => findNestedItemByPath<User>(tweet, TWEET_DETAIL_USER_PATH_PARTS))
+    .filter((item): item is User => item != null);
+}
+
+const FOLLOW_USER_PATH_PARTS = ['user_results', 'result', 'legacy'];
+const FOLLOW_ITEM_QUERY = { itemType: 'TimelineUser' };
+
+export function getUsersFollowing(data: unknown): User[] {
+  const tweets = [...findDeep(data, FOLLOW_ITEM_QUERY)];
+  return tweets
+    .map((tweet) => findNestedItemByPath<User>(tweet, FOLLOW_USER_PATH_PARTS))
     .filter((item): item is User => item != null);
 }

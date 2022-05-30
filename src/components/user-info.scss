@@ -2,32 +2,105 @@
   padding: 0 4px;
   display: flex;
   gap: 4px;
+  & > .followers {
+    font-weight: bold;
+  }
+  & > .chip1 {
+    font-size: 80%;
+    padding: 0px 6px;
+    border-radius: 8px;
+  }
+  & > .chip2 {
+    font-size: 80%;
+    padding: 0px 4px;
+    border-radius: 4px;
+  }
+  .chip.disabled {
+    opacity: 0.3;
+    text-decoration: line-through;
+  }
 }
 
-.user-info > .value {
-  color: white;
-  font-weight: bold;
+body[data-theme='dark'] {
+  $friend-color: rgb(253, 215, 43);
+  $chip-color: rgb(231, 233, 234);
+  .user-info {
+    & > .followers {
+      color: #e8e8e8;
+    }
+    & > .chip1 {
+      outline: 1px solid rgba($chip-color, 0.6);
+      color: rgba($chip-color, 0.6);
+      &.friend {
+        outline: 1px solid rgba($friend-color, 0.6);
+        color: rgba($friend-color, 0.6);
+      }
+    }
+    & > .chip2 {
+      background: rgba($chip-color, 0.08);
+      &.friend {
+        color: rgba($friend-color, 0.6);
+        background: rgba($friend-color, 0.08);
+      }
+    }
+  }
+  .friend > a > div > div {
+    color: rgba($friend-color, 0.8);
+  }
 }
 
-.user-info > .chip1 {
-  font-size: 80%;
-  padding: 0px 6px;
-  border-radius: 8px;
-  outline: 1px solid rgba(255, 255, 255, 0.6);
-  color: rgba(255, 255, 255, 0.6);
+body[data-theme='dim'] {
+  $friend-color: rgb(253, 215, 43);
+  $chip-color: rgb(247, 249, 249);
+  .user-info {
+    & > .followers {
+      color: $chip-color;
+    }
+    & > .chip1 {
+      outline: 1px solid rgba($chip-color, 0.7);
+      color: rgba($chip-color, 0.7);
+      &.friend {
+        outline: 1px solid rgba($friend-color, 0.7);
+        color: rgba($friend-color, 0.7);
+      }
+    }
+    & > .chip2 {
+      background: rgba($chip-color, 0.12);
+      &.friend {
+        color: rgba($friend-color, 0.7);
+        background: rgba($friend-color, 0.08);
+      }
+    }
+  }
+  .friend > a > div > div {
+    color: rgba($friend-color, 0.9);
+  }
 }
 
-.user-info > .chip2 {
-  font-size: 80%;
-  padding: 0px 4px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-}
-
-.user-info .disabled {
-  opacity: 0.3;
-}
-
-.user-info .chip.disabled {
-  text-decoration: line-through;
+body[data-theme='light'] {
+  $friend-color: rgb(185, 152, 2);
+  $chip-color: rgb(15, 20, 25);
+  .user-info {
+    & > .followers {
+      color: $chip-color;
+    }
+    & > .chip1 {
+      outline: 1px solid rgba($chip-color, 0.8);
+      color: rgba($chip-color, 0.8);
+      &.friend {
+        outline: 1px solid rgba($friend-color, 0.8);
+        color: rgba($friend-color, 0.9);
+      }
+    }
+    & > .chip2 {
+      background: rgba($chip-color, 0.12);
+      &.friend {
+        color: rgba($friend-color, 0.8);
+        background: rgba($friend-color, 0.12);
+      }
+    }
+  }
+  .friend > a > div > div {
+    color: rgba($friend-color, 1);
+  }
 }

@@ -23,7 +23,7 @@ export = {
   rules: [
     {
       hostname: 'twitter.com',
-      path: /^\/($|home|explore|search|[^\/]+?\/status\/\d+$|[^\/]+?\/following$|hashtag\/)/,
+      path: /^\/($|home|explore|search|[^\/]+?\/status\/\d+$|[^\/]+?\/(following|followers|lists|notifications)$|hashtag\/|[^\/]+$|i\/bookmarks$|messages$)/,
       action: {
         scripts: ['default'],
       },

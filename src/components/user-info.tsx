@@ -1,17 +1,19 @@
 import { User } from '../models/users';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { h } from 'preact';
+import { Fragment, h } from 'preact';
 import './user-info.scss';
 
 type UserInfoProps = {
   user: User;
   styles?: CSSStyleDeclaration;
+  variant?: 'full' | 'short';
 };
 
-export function UserInfo({ user, styles }: UserInfoProps) {
+export function UserInfo(props: UserInfoProps) {
+  const { user, styles, variant = 'full' } = props;
   return (
     <div
-      class="user-info"
+      class={`user-info ${user.followed_by && user.following ? 'friend' : ''}`}
       style={{
         color: styles?.color,
         fontFamily: styles?.fontFamily,
@@ -19,14 +21,17 @@ export function UserInfo({ user, styles }: UserInfoProps) {
       }}
     >
       <span>·</span>
-      <span class="value" title={formatNumOfFollowers(user.followers_count, false)}>
+      <span class="followers" title={`${formatNumOfFollowers(user.followers_count, false)} Followers`}>
         {formatNumOfFollowers(user.followers_count)}
       </span>
-      <span class="label">Followers</span>
-      <span class={`${user.following ? '' : 'disabled'}`}>·</span>
-      <span class={`chip chip1 ${user.following ? '' : 'disabled'}`}>Following</span>
-      <span class={`${user.followed_by ? '' : 'disabled'}`}>·</span>
-      <span class={`chip chip2 ${user.followed_by ? '' : 'disabled'}`}>Follows you</span>
+      {variant === 'full' && (
+        <Fragment>
+          <span class={`${user.following ? '' : 'disabled'}`}>·</span>
+          <span class={`chip chip1 ${user.following ? 'friend' : 'disabled'}`}>Following</span>
+          <span class={`${user.followed_by ? '' : 'disabled'}`}>·</span>
+          <span class={`chip chip2 ${user.followed_by ? 'friend' : 'disabled'}`}>Follows you</span>
+        </Fragment>
+      )}
     </div>
   );
 }

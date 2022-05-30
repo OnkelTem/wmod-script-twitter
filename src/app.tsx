@@ -1,10 +1,17 @@
 import ApiWatcher from './watchers/api.watcher';
 import DomWatcher from './watchers/dom.watcher';
-import { getUsersTweetDetail, isGlobalObjectsWithUsers, User, Username } from './models/users';
+import {
+  getUsersFollowing as getUsersFollow,
+  getUsersTweetDetail,
+  isGlobalObjectsWithUsers,
+  User,
+  Username,
+} from './models/users';
 import { BetterObject, dbg, info, injectWrapper } from './utils';
 import { UserInfo } from './components/user-info';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { h, render } from 'preact';
+import rgbHex from 'rgb-hex';
 
 const userStore = new Map<Username, User>();
 
@@ -35,43 +42,81 @@ export default function app() {
   );
 
   // GraphQL results
-  ApiWatcher().subscribe(['^https://twitter.com/i/api/graphql/[^/]+?/TweetDetail'], (data, url) => {
-    info(`GraphQL data received from: ${url}`);
-    dbg(`GraphQL data:`, data);
-    getUsersTweetDetail(data).forEach((user) => {
-      dbg(`Setting userStore user from GraphQL:`, user.screen_name);
-      userStore.set(user.screen_name, user);
-    });
-  });
+  ApiWatcher().subscribe(
+    ['^https://twitter.com/i/api/graphql/[^/]+?/(TweetDetail|Following|Followers)'],
+    (data, url) => {
+      info(`GraphQL data received from: ${url}`);
+      dbg(`GraphQL data:`, data);
+      getUsersTweetDetail(data).forEach((user) => {
+        dbg(`Setting userStore user from GraphQL TweetDetail:`, user.screen_name);
+        userStore.set(user.screen_name, user);
+      });
+      getUsersFollow(data).forEach((user) => {
+        dbg(`Setting userStore user from GraphQL Follow:`, user.screen_name);
+        userStore.set(user.screen_name, user);
+      });
+    },
+  );
 
-  DomWatcher('#react-root').subscribe('div[style^="transform: translateY"]', (el) => {
-    dbg('Updated el: ', el);
-    const userElements: UserElements = new Map();
-    const userDiv = el.querySelector('div[id]:not([style])');
-    dbg('userDiv: ', userDiv);
-    if (userDiv != null && userDiv instanceof HTMLDivElement) {
-      const link = userDiv.querySelector('a[href]');
-      if (link != null && link instanceof HTMLAnchorElement) {
-        const url = new URL(link.href);
-        const username = url.pathname.substring(1);
-        if (userElements.has(username)) {
-          dbg(`Updating userElement for ${username}`);
-          const userDivs = userElements.get(username)!;
-          const indexId = userDivs.findIndex((knownUserDiv) => knownUserDiv.id === userDiv.id);
-          if (indexId === -1) {
-            dbg(`Adding new userDiv for existing ${username}:`, userDiv);
-            userDivs.push(userDiv);
-          } else {
-            dbg(`Updating userDiv for existing ${username}:`, userDiv);
-            userElements.set(username, [...userDivs.slice(0, indexId), userDiv, ...userDivs.slice(indexId + 1)]);
-          }
-        } else {
-          dbg(`Adding new userElement for ${username} with userDiv:`, userDiv);
-          userElements.set(username, [userDiv]);
-        }
-        renderUserElements(userElements);
+  // Watch body style attribute change to detect theme mode
+  DomWatcher('body', { attributes: true, attributeFilter: ['style'] }).subscribe((mutations) => {
+    const m = mutations[0];
+    if (m != null && m.type === 'attributes') {
+      if (m.attributeName === 'style' && m.target instanceof HTMLBodyElement) {
+        const styles = window.getComputedStyle(m.target);
+        const color = rgbHex(styles.backgroundColor);
+        m.target.setAttribute('data-theme', color === 'ffffff' ? 'light' : color === '000000' ? 'dark' : 'dim');
       }
     }
+  });
+
+  DomWatcher('#react-root', { childList: true, subtree: true }).subscribe((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'childList') {
+        const nodes = mutation.addedNodes;
+        for (const node of nodes) {
+          if (node instanceof Element && node.matches('div[style^="transform: translateY"]')) {
+            dbg('Updated el: ', node);
+            const userElements: UserElements = new Map();
+            //const userDiv = el.querySelector('div[id]:not([style])');
+            const userDivs = [...window.$x('.//div[div[2]/div/a[count(div) = 1]]', node)];
+            dbg('userDivs: ', userDivs);
+            if (userDivs.length > 0) {
+              const userDiv = userDivs[0];
+              //for (const userDiv of )
+              dbg('userDiv: ', userDiv);
+              if (userDiv instanceof HTMLDivElement) {
+                const link = userDiv.querySelector('a[href]');
+                if (link != null && link instanceof HTMLAnchorElement) {
+                  const url = new URL(link.href);
+                  const username = url.pathname.substring(1);
+                  if (userElements.has(username)) {
+                    dbg(`Updating userElement for ${username}`);
+                    const userDivs = userElements.get(username)!;
+                    const indexId = userDivs.findIndex((knownUserDiv) => knownUserDiv.id === userDiv.id);
+                    if (indexId === -1) {
+                      dbg(`Adding new userDiv for existing ${username}:`, userDiv);
+                      userDivs.push(userDiv);
+                    } else {
+                      dbg(`Updating userDiv for existing ${username}:`, userDiv);
+                      userElements.set(username, [
+                        ...userDivs.slice(0, indexId),
+                        userDiv,
+                        ...userDivs.slice(indexId + 1),
+                      ]);
+                    }
+                  } else {
+                    dbg(`Adding new userElement for ${username} with userDiv:`, userDiv);
+                    userElements.set(username, [userDiv]);
+                  }
+                  renderUserElements(userElements);
+                }
+              }
+            }
+          }
+        }
+      }
+    });
   });
 }
 
@@ -88,20 +133,39 @@ function renderUserElements(userElements: UserElements) {
         // Tweet header looks like:
         //
         //   PICTURE
-        //   PICTURE   Very long user title with unicode junk...
-        //   PICTURE   @username · TIME · <injection point>
+        //   PICTURE   Very long user title with unicode junk...  -- firstLineDiv
+        //   PICTURE   @username · TIME · <injection point>       -- secondLineDiv
         //   PICTURE
         //
         // So it is the second child div.
-        const div = userDiv.children[1];
-        if (div instanceof HTMLElement) {
+        // Тут нужно добавить
+        const firstLineDiv = userDiv.children[0];
+        // We need to apply custom class to it
+        dbg('firstLineDiv', firstLineDiv);
+        if (user.followed_by && user.following) {
+          if (!firstLineDiv.classList.contains('friend')) {
+            firstLineDiv.classList.add('friend');
+            const styles = window.getComputedStyle(firstLineDiv);
+            dbg('styles', styles);
+          }
+        }
+        const secondLineDiv = userDiv.children[1];
+        dbg('secondLineDiv', secondLineDiv);
+        if (secondLineDiv instanceof HTMLElement) {
           // Copy styles from the first element
-          const copySourceEl = div.querySelector('div > a span');
+          const copySourceEl = secondLineDiv.querySelector('div > a span');
           let styles: CSSStyleDeclaration | undefined;
           if (copySourceEl instanceof HTMLElement) {
             styles = window.getComputedStyle(copySourceEl);
           }
-          render(<UserInfo user={user} styles={styles} />, injectWrapper(div));
+          render(
+            <UserInfo
+              user={user}
+              styles={styles}
+              variant={window.location.pathname.match(/(following|followers)$/) ? 'short' : 'full'}
+            />,
+            injectWrapper(secondLineDiv),
+          );
         }
       }
     }
